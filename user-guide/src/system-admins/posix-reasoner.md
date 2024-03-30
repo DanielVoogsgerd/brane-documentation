@@ -4,6 +4,8 @@ The POSIX policy reasoner is based on POSIX file permissions. It aims to be a si
 default eFLINT reasoner. This simplicity should make it easy to try out Brane. However, if you need to be able
 to express complex rules/policies, then stick with the default eFLINT reasoner.
 
+This section includes an introduction to the POSIX reasoner, and a tutorial in which you can learn more about and get to use the POSIX reasoner.
+
 ## Introduction
 
 The POSIX reasoner relies on the [POSIX file
@@ -71,26 +73,19 @@ reasoner.
 
 ### Prerequisites
 
-Create a `brane` directory to store all Brane related repositories.
-
-Clone the [policy reasoner](https://github.com/epi-project/policy-reasoner) repository.
-
-Clone the [policy reasoner GUI](https://github.com/epi-project/policy-reasoner-gui) repository.
-
-Clone the [eflint-server-go](https://github.com/epi-project/eflint-server-go) repository.
-
-`cd eflint-server-go/cmd/eflint-to-json` and compile the binary using `go build`. To cross compile for macOS (M1, M2, M3), you can run `GOOS=darwin GOARCH=arm64 go build -o eflint-to-json`.
-
-`cd policy-reasoner` and create a `.env` file with the following content:
+1. Create a `brane` directory to store all Brane related repositories.
+2. Clone the [policy reasoner](https://github.com/epi-project/policy-reasoner) repository.
+3. Clone the [policy reasoner GUI](https://github.com/epi-project/policy-reasoner-gui) repository.
+4. Clone the [eflint-server-go](https://github.com/epi-project/eflint-server-go) repository.
+5. `cd eflint-server-go/cmd/eflint-to-json` and compile the binary using `go build`. To cross compile for macOS (M1, M2, M3), you can run `GOOS=darwin GOARCH=arm64 go build -o eflint-to-json`.
+6. `cd policy-reasoner` and create a `.env` file with the following content.
 ```bash
-EFLINT_TO_JSON_PATH=../eflint-server/eflint-to-json
+EFLINT_TO_JSON_PATH=../eflint-server-go/eflint-to-json
 DATA_INDEX=./tests/data
 ```
-
-Install the `diesel_cli` using `cargo install diesel_cli --no-default-features
+7. Install the `diesel_cli` using `cargo install diesel_cli --no-default-features
 --feature sqlite`.
-
-Install the `yq` command line tool using for example `brew install yq` or `sudo apt install yq`.
+8. Install the `yq` command line tool using for example `brew install yq` or `sudo apt install yq`.
 
 ### Configuration
 
@@ -183,14 +178,14 @@ should be allowed.
 
 ## Demonstration
 
-Using the same steps as described above try updating the policy file and checking whether the workflow is allowed to be
+Using the same steps as described above, try creating the policy file and checking whether the workflow is allowed to be
 run.
 
 ```yaml
 # posix-policy.yml
 description: This file contains the policy for the surf dataset.
 version: 0.1.0
-version_description: 
+version_description: The policy is used to define the users and groups that have access to the dataset.
 content:
   - reasoner: posix
     reasoner_version: 0.0.1
@@ -229,7 +224,7 @@ test:
     - 20
 ```
 
-4. Global access can be modified by altering the permissions of the owner group via the `chmod command` (changing file
+4. Global (Others) access can be modified by altering the permissions of the owner group via the `chmod command` (changing file
    permissions). Run
 ```bash
 # Add read and write permissions to the others class
@@ -249,10 +244,10 @@ test:
   uid: 502
   gids:
     - 101
-    # Gid of the file owner of the file 
+    # Gid of the file owner of the file
     - 20
 new_user:
-  # Add the uid of the file owner here if new_user should have the same permissions as the file owner 
+  # Add the uid of the file owner here if new_user should have the same permissions as the file owner
   uid: 1000
   gids:
     # Add the gid of the file owner to the gids property to give new_user the same permissions as the owner of the file
