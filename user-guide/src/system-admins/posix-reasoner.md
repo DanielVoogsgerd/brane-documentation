@@ -82,8 +82,8 @@ Clone the [eflint-server-go](https://github.com/epi-project/eflint-server-go) re
 
 `cd policy-reasoner` and create a `.env` file with the following content:
 ```bash
-EFLINT_TO_JSON_PATH=../eflint-server/eflint-to-json`
-DATA_INDEX=tests/data/`
+EFLINT_TO_JSON_PATH=../eflint-server/eflint-to-json
+DATA_INDEX=./tests/data
 ```
 
 Install the `diesel_cli` using `cargo install diesel_cli --no-default-features
