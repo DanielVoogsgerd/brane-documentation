@@ -87,6 +87,10 @@ DATA_INDEX=./tests/data
 --feature sqlite`.
 8. Install the `yq` command line tool using for example `brew install yq` or `sudo apt install yq`.
 
+Note: for the most up-to-date instructions check out the READMEs in the
+[policy-reasoner](https://github.com/epi-project/policy-reasoner) and
+[policy-reasoner-gui](https://github.com/epi-project/policy-reasoner-gui) repositories.
+
 ### Configuration
 
 #### Environment
