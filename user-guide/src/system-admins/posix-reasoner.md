@@ -65,5 +65,75 @@ mapping to and then using a user ID and group IDs on the local machine.
 
 ## Tutorial
 
-TODO: Practical. Step by step. Provide example use case, including simple workflow, mapping, etc. How to enable the
-reasoner to run in Posix mode instead of eFLINT. Potentially take inspiration from this from the existing documentation.
+This tutorial uses the `policy-reasoner` and `policy-reasoner-gui` to demonstrate the new POSIX policy reasoner.
+
+### Prerequisites
+
+
+Create a `brane` directory to store all Brane related repositories.
+
+Clone the [policy reasoner](https://github.com/epi-project/policy-reasoner) repository.
+
+Clone the [policy reasoner GUI](https://github.com/epi-project/policy-reasoner-gui) repository.
+
+Clone the [eflint-server-go](https://github.com/epi-project/eflint-server-go) repository.
+
+`cd eflint-server-go/cmd/eflint-to-json` and compile the binary using `go build`. To cross compile for macOS (M1, M2, M3), you can run `GOOS=darwin GOARCH=arm64 go build -o eflint-to-json`.
+
+`cd policy-reasoner` and create a `.env` file with the following content:
+```bash
+EFLINT_TO_JSON_PATH=../eflint-server/eflint-to-json`
+DATA_INDEX=tests/data/`
+```
+
+Install the `diesel_cli` using `cargo install diesel_cli --no-default-features
+--feature sqlite`.
+
+Install the `yq` command line tool using for example `brew install yq` or `sudo apt install yq`.
+
+### Demonstration
+
+We'll be using the example test datasets already set up in the policy reasoner repository. Navigate to `policy-reasoner/tests/data/umc_utrecht_ect/` and take a look at the `test.yml` file. This is the dataset identifier file as described in the introduction above. The `test.txt` file is the file that contains the dataset's actual data.
+
+Under `policy-reasoner/tests/management` you'll find a `posix-policy.yml` file. `stat posix-policy.yml` will (among other metadata) show the file owner. It should be your current user account. Run `id` and note the `uid`. Now in the `posix-policy.yml` file change the `uid` in the mapping for the location `umc_utrecht_ect` and for the global user `test` to the `uid` of your own user account.
+
+With the POSIX policy defined in `posix-policy.yml` navigate back to the root directory of the `posix-reasoner` repository and generate a JSON version of the POSIX policy file with `yq -o=json -I=0 '.' ./tests/management/posix-policy.yml > ./tests/management/posix-policy.json` (verified with `yq` version `4.43.1` on macOS).
+
+We're now ready to add and activate the policy.
+
+Start the POSIX policy reasoner from `policy-reasoner` with `cargo run --bin posix`.
+
+Then from `policy-reasoner` run:
+```bash
+export JWT_DELIB="$(cat ./jwt_delib.json)"
+export JWT_EXPERT="$(cat ./jwt_expert.json)"
+```
+
+```bash
+# Create the Posix policy
+curl -X POST -H "Authorization: Bearer $JWT_EXPERT" -H "Content-Type: application/json" -d "@tests/management/posix-policy.json" localhost:3030/v1/management/policies
+```
+
+```bash
+# Activate the Posix policy
+curl -X PUT -H "Authorization: Bearer $JWT_EXPERT" -H "Content-Type: application/json" -d '{"version": 1 }' localhost:3030/v1/management/policies/active
+```
+
+
+Now also start the policy reasoner GUI from `policy-reasoner-gui` with `cargo run`.
+
+Navigate to [http://localhost:3001/deliberation](http://localhost:3001/deliberation).
+
+From `policy-reasoner` run `cat ./jwt_delib.json` and paste the token into the prompt on the webpage.
+
+On the webpage change the request type (in the top left) to `Validate workflow`.
+
+Then enter the workflow below and press the `Execute` button. The verdict is shown on the right. This workflow should be allowed.
+```js
+#[on("surf")]
+{
+  let data0 := new Data { name := "umc_utrecht_ect" };
+
+  commit_result("umc_utrecht_ect", data0);
+}
+```
