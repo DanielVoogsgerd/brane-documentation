@@ -41,17 +41,17 @@ jobs:
           ls
           make all
 
-      # TODO: Condition compile docs on certain inputs
-      # - uses: actions/checkout@v4
-      #   with:
-      #     repository: "epi-project/brane"
-      #     path: code
-      #
-      # - name: Build code documentation
-      #   run: |
-      #     cd code
-      #     cargo doc --workspace
-      #     cp -r target/doc ../build/docs
+      - uses: actions/checkout@v4
+        with:
+          repository: "epi-project/brane"
+          ref: ${{ inputs.ref }}
+          path: code
+
+      - name: Build code documentation
+        run: |
+          cd code
+          cargo doc --workspace
+          cp -r target/doc ../build/docs
 
       - name: Upload result
         uses: actions/upload-artifact@v4
