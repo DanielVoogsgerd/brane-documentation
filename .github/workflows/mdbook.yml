@@ -58,6 +58,10 @@ jobs:
           name: docs-main
           path: output/nightly
 
+      - name: Show result
+        run: |
+          find output
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
