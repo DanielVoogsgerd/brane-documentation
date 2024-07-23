@@ -30,9 +30,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: v3.x.x
-            brane-ref: "v3.0.0"
-            docs-ref: "main"
+          # - name: v3.x.x
+          #   brane-ref: "v3.0.0"
+          #   docs-ref: "main"
 
           - name: nightly
             brane-ref: "main"
