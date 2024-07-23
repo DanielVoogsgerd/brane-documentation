@@ -53,8 +53,8 @@ jobs:
       #     cargo doc --workspace
       #     cp -r target/doc ../build/docs
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Upload result
+        uses: actions/upload-artifact@v4
         with:
-          path: ./build
           name: docs-${{ inputs.ref }}
+          path: build

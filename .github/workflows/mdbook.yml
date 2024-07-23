@@ -55,12 +55,13 @@ jobs:
       - name: Download docs (nightly)
         uses: actions/download-artifact@v4
         with:
-          name: docs-main
+          name: docs-nightly
           path: output/nightly
 
-      - name: Show result
+      - name: Create symlinks for backward compatiblity
         run: |
-          find output
+          pushd output
+          find stable -maxdepth 1 -exec ln -s
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
