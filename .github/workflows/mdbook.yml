@@ -56,16 +56,16 @@ jobs:
         run: |
           make all
 
-      - uses: actions/checkout@v4
-        with:
-          repository: "epi-project/brane"
-          path: code
-
-      - name: Build code documentation
-        run: |
-          cd code
-          cargo doc --workspace
-          cp -r target/doc ../build/docs
+      # - uses: actions/checkout@v4
+      #   with:
+      #     repository: "epi-project/brane"
+      #     path: code
+      #
+      # - name: Build code documentation
+      #   run: |
+      #     cd code
+      #     cargo doc --workspace
+      #     cp -r target/doc ../build/docs
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
