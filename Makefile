@@ -28,4 +28,4 @@ serve:
 
 .PHONY: clean
 clean:
-	rm -r build
+	rm -r build | true
