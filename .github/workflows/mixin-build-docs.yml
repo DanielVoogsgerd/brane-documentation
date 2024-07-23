@@ -42,6 +42,7 @@ jobs:
 
       - name: Build with mdBook (Main)
         run: |
+          ls
           make all
 
       # TODO: Condition compile docs on certain inputs
