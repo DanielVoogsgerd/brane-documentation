@@ -34,15 +34,51 @@ jobs:
     with:
       ref: ${{ matrix.ref }}
 
-  # Deployment job
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  collect:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Prepare environment
+        run: |
+          mkdir output
+
+      - name: Download docs (main)
+        uses: actions/download-artifact@v4
+        with:
+          name: docs-main
+          path: output/stable
+
+      - name: Download docs (nightly)
+        uses: actions/download-artifact@v4
+        with:
+          name: docs-main
+          path: output/nightly
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./output
+          name: github-pages
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
+        with:
+          name: complete-docs
+  #
+  # # Deployment job
+  # deploy:
+  #   environment:
+  #     name: github-pages
+  #     url: ${{ steps.deployment.outputs.page_url }}
+  #   runs-on: ubuntu-latest
+  #   needs: collect
+  #   steps:
+  #     - name: Deploy to GitHub Pages
+  #       id: deployment
+  #       uses: actions/deploy-pages@v4
+  #
