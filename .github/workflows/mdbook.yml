@@ -29,10 +29,20 @@ jobs:
   build:
     strategy:
       matrix:
-        ref: [ main, nightly ]
+        include:
+          - name: v3.x.x
+            brane-ref: "v3.0.0"
+            docs-ref: "main"
+
+          - name: nightly
+            brane-ref: "main"
+            docs-ref: "nightly"
+
     uses: ./.github/workflows/mixin-build-docs.yml
     with:
-      ref: ${{ matrix.ref }}
+      artifact-name: docs-${ matrix.name }}
+      docs-ref: ${{ matrix.docs-ref }}
+      brane-ref: ${{ matrix.brane-ref }}
 
   collect:
     runs-on: ubuntu-latest
