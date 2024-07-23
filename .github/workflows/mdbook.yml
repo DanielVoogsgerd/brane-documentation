@@ -54,23 +54,7 @@ jobs:
 
       - name: Build with mdBook (Main)
         run: |
-          mdbook build main
-          cp -r main/book build
-
-      - name: Build with mdBook (User Guide)
-        run: |
-          mdbook build user-guide
-          cp -r user-guide/book build/user-guide
-
-      - name: Build with mdBook (Specification)
-        run: |
-          mdbook build specification
-          cp -r specification/book build/specification
-
-      - name: Build with mdBook (Tutorials)
-        run: |
-          mdbook build tutorials
-          cp -r tutorials/book build/tutorials
+          make all
 
       - uses: actions/checkout@v4
         with:
