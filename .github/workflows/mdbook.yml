@@ -61,7 +61,7 @@ jobs:
       - name: Create symlinks for backward compatiblity
         run: |
           pushd output
-          find stable -maxdepth 1 -exec ln -s
+          find stable -maxdepth 1 -exec ln -s "{}" \;
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
