@@ -5,7 +5,7 @@
 
 > <img src="./assets/img/warning.png" alt="drawing" width="16" style="margin-top: 2px; margin-bottom: -2px"/> This book is still in development. Everything is currently subject to change.
 
-Welcome to the user guide for the Brane infrastructure!
+Hi, Welcome to the user guide for the Brane infrastructure!
 
 In this book, we document and outline how to use _Brane_, a programmable application orchestration framework, from a user perspective.
 
